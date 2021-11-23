@@ -1,6 +1,0 @@
-apiVersion: webapp.plural.sh/v1alpha1
-kind: MLFlow
-metadata:
-  name: mlflow-sample
-spec:
-  # TODO(user): Add fields here

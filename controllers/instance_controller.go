@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package webapp
+package controllers
 
 import (
 	"context"
@@ -24,29 +24,29 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/log"
 
-	webappv1alpha1 "github.com/pluralsh/mlflow-operator/apis/webapp/v1alpha1"
+	mlflowv1alpha1 "github.com/pluralsh/mlflow-operator/api/v1alpha1"
 )
 
-// MLFlowReconciler reconciles a MLFlow object
-type MLFlowReconciler struct {
+// InstanceReconciler reconciles a Instance object
+type InstanceReconciler struct {
 	client.Client
 	Scheme *runtime.Scheme
 }
 
-//+kubebuilder:rbac:groups=webapp.plural.sh,resources=mlflows,verbs=get;list;watch;create;update;patch;delete
-//+kubebuilder:rbac:groups=webapp.plural.sh,resources=mlflows/status,verbs=get;update;patch
-//+kubebuilder:rbac:groups=webapp.plural.sh,resources=mlflows/finalizers,verbs=update
+//+kubebuilder:rbac:groups=mlflow.plural.sh,resources=instances,verbs=get;list;watch;create;update;patch;delete
+//+kubebuilder:rbac:groups=mlflow.plural.sh,resources=instances/status,verbs=get;update;patch
+//+kubebuilder:rbac:groups=mlflow.plural.sh,resources=instances/finalizers,verbs=update
 
 // Reconcile is part of the main kubernetes reconciliation loop which aims to
 // move the current state of the cluster closer to the desired state.
 // TODO(user): Modify the Reconcile function to compare the state specified by
-// the MLFlow object against the actual cluster state, and then
+// the Instance object against the actual cluster state, and then
 // perform operations to make the cluster state reflect the state specified by
 // the user.
 //
 // For more details, check Reconcile and its Result here:
 // - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.10.0/pkg/reconcile
-func (r *MLFlowReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
+func (r *InstanceReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	_ = log.FromContext(ctx)
 
 	// TODO(user): your logic here
@@ -55,8 +55,8 @@ func (r *MLFlowReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctr
 }
 
 // SetupWithManager sets up the controller with the Manager.
-func (r *MLFlowReconciler) SetupWithManager(mgr ctrl.Manager) error {
+func (r *InstanceReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
-		For(&webappv1alpha1.MLFlow{}).
+		For(&mlflowv1alpha1.Instance{}).
 		Complete(r)
 }

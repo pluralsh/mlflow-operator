@@ -1,7 +1,6 @@
 domain: plural.sh
 layout:
 - go.kubebuilder.io/v3
-multigroup: true
 projectName: mlflow-operator
 repo: github.com/pluralsh/mlflow-operator
 resources:
@@ -10,8 +9,8 @@ resources:
     namespaced: true
   controller: true
   domain: plural.sh
-  group: webapp
-  kind: MLFlow
-  path: github.com/pluralsh/mlflow-operator/apis/webapp/v1alpha1
+  group: mlflow
+  kind: Instance
+  path: github.com/pluralsh/mlflow-operator/api/v1alpha1
   version: v1alpha1
 version: "3"

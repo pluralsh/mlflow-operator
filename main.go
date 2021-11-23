@@ -31,8 +31,8 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/healthz"
 	"sigs.k8s.io/controller-runtime/pkg/log/zap"
 
-	webappv1alpha1 "github.com/pluralsh/mlflow-operator/apis/webapp/v1alpha1"
-	webappcontrollers "github.com/pluralsh/mlflow-operator/controllers/webapp"
+	mlflowv1alpha1 "github.com/pluralsh/mlflow-operator/api/v1alpha1"
+	"github.com/pluralsh/mlflow-operator/controllers"
 	//+kubebuilder:scaffold:imports
 )
 
@@ -44,7 +44,7 @@ var (
 func init() {
 	utilruntime.Must(clientgoscheme.AddToScheme(scheme))
 
-	utilruntime.Must(webappv1alpha1.AddToScheme(scheme))
+	utilruntime.Must(mlflowv1alpha1.AddToScheme(scheme))
 	//+kubebuilder:scaffold:scheme
 }
 
@@ -78,11 +78,11 @@ func main() {
 		os.Exit(1)
 	}
 
-	if err = (&webappcontrollers.MLFlowReconciler{
+	if err = (&controllers.InstanceReconciler{
 		Client: mgr.GetClient(),
 		Scheme: mgr.GetScheme(),
 	}).SetupWithManager(mgr); err != nil {
-		setupLog.Error(err, "unable to create controller", "controller", "MLFlow")
+		setupLog.Error(err, "unable to create controller", "controller", "Instance")
 		os.Exit(1)
 	}
 	//+kubebuilder:scaffold:builder

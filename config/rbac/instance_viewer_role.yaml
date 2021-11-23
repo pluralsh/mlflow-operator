@@ -1,20 +1,20 @@
-# permissions for end users to view mlflows.
+# permissions for end users to view instances.
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: mlflow-viewer-role
+  name: instance-viewer-role
 rules:
 - apiGroups:
-  - webapp.plural.sh
+  - mlflow.plural.sh
   resources:
-  - mlflows
+  - instances
   verbs:
   - get
   - list
   - watch
 - apiGroups:
-  - webapp.plural.sh
+  - mlflow.plural.sh
   resources:
-  - mlflows/status
+  - instances/status
   verbs:
   - get
