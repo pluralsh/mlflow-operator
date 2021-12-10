@@ -10,7 +10,7 @@ resources:
   controller: true
   domain: plural.sh
   group: mlflow
-  kind: Instance
+  kind: TrackingServer
   path: github.com/pluralsh/mlflow-operator/api/v1alpha1
   version: v1alpha1
 version: "3"

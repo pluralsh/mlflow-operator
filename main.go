@@ -31,6 +31,9 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/healthz"
 	"sigs.k8s.io/controller-runtime/pkg/log/zap"
 
+	postgresv1 "github.com/zalando/postgres-operator/pkg/apis/acid.zalan.do/v1"
+	istioNetworkingClient "istio.io/client-go/pkg/apis/networking/v1beta1"
+
 	mlflowv1alpha1 "github.com/pluralsh/mlflow-operator/api/v1alpha1"
 	"github.com/pluralsh/mlflow-operator/controllers"
 	//+kubebuilder:scaffold:imports
@@ -45,6 +48,8 @@ func init() {
 	utilruntime.Must(clientgoscheme.AddToScheme(scheme))
 
 	utilruntime.Must(mlflowv1alpha1.AddToScheme(scheme))
+	utilruntime.Must(istioNetworkingClient.AddToScheme(scheme))
+	utilruntime.Must(postgresv1.AddToScheme(scheme))
 	//+kubebuilder:scaffold:scheme
 }
 
@@ -57,9 +62,7 @@ func main() {
 	flag.BoolVar(&enableLeaderElection, "leader-elect", false,
 		"Enable leader election for controller manager. "+
 			"Enabling this will ensure there is only one active controller manager.")
-	opts := zap.Options{
-		Development: true,
-	}
+	opts := zap.Options{}
 	opts.BindFlags(flag.CommandLine)
 	flag.Parse()
 
@@ -78,11 +81,12 @@ func main() {
 		os.Exit(1)
 	}
 
-	if err = (&controllers.InstanceReconciler{
+	if err = (&controllers.TrackingServerReconciler{
 		Client: mgr.GetClient(),
+		Log:    ctrl.Log.WithName("controllers").WithName("TrackingServer"),
 		Scheme: mgr.GetScheme(),
 	}).SetupWithManager(mgr); err != nil {
-		setupLog.Error(err, "unable to create controller", "controller", "Instance")
+		setupLog.Error(err, "unable to create controller", "controller", "TrackingServer")
 		os.Exit(1)
 	}
 	//+kubebuilder:scaffold:builder

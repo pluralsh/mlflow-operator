@@ -1,13 +1,15 @@
-# permissions for end users to edit instances.
+
+---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: instance-editor-role
+  creationTimestamp: null
+  name: manager-role
 rules:
 - apiGroups:
   - mlflow.plural.sh
   resources:
-  - instances
+  - trackingservers
   verbs:
   - create
   - delete
@@ -19,6 +21,14 @@ rules:
 - apiGroups:
   - mlflow.plural.sh
   resources:
-  - instances/status
+  - trackingservers/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - mlflow.plural.sh
+  resources:
+  - trackingservers/status
   verbs:
   - get
+  - patch
+  - update

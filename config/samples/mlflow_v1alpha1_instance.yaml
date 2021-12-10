@@ -1,6 +1,0 @@
-apiVersion: mlflow.plural.sh/v1alpha1
-kind: Instance
-metadata:
-  name: instance-sample
-spec:
-  # TODO(user): Add fields here

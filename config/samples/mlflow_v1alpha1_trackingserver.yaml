@@ -1,0 +1,12 @@
+apiVersion: mlflow.plural.sh/v1alpha1
+kind: TrackingServer
+metadata:
+  name: trackingserver-sample
+  namespace: david
+spec:
+  image: davidspek/mlflow-server:1.19.0
+  replicas: 1
+  size: "5Gi"
+  network:
+    istioGatewayName: kubeflow-gateway
+    istioGatewayNamespace: kubeflow
