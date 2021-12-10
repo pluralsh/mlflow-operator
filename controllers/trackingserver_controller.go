@@ -345,8 +345,12 @@ func (r *TrackingServerReconciler) generatePostgresService(tsInstance *mlflowv1a
 func (r *TrackingServerReconciler) generateStatefulset(tsInstance *mlflowv1alpha1.TrackingServer) *appsv1.StatefulSet {
 	replicas := tsInstance.Spec.Replicas
 	labels := map[string]string{
-		"statefulset":                  tsInstance.Name,
-		"app.kubernetes.io/managed-by": "mlflow-operator",
+		"statefulset": tsInstance.Name,
+	}
+	if tsInstance.Spec.ExtraPodLabels != nil {
+		for k, v := range tsInstance.Spec.ExtraPodLabels {
+			labels[k] = v
+		}
 	}
 	container := []corev1.Container{
 		{
@@ -397,7 +401,7 @@ func (r *TrackingServerReconciler) generateStatefulset(tsInstance *mlflowv1alpha
 				},
 				{
 					Name:  "ARTIFACT_ROOT",
-					Value: "file:///mnt/mlruns/artifacts",
+					Value: tsInstance.Spec.DefaultArtifactRoot,
 				},
 			},
 			Ports: []corev1.ContainerPort{
@@ -461,7 +465,8 @@ func (r *TrackingServerReconciler) generateStatefulset(tsInstance *mlflowv1alpha
 							},
 						},
 					},
-					SecurityContext: &corev1.PodSecurityContext{},
+					SecurityContext:    &corev1.PodSecurityContext{},
+					ServiceAccountName: tsInstance.Spec.ServiceAccountName,
 				},
 			},
 		},

@@ -29,14 +29,30 @@ type TrackingServerSpec struct {
 	// Important: Run "make" to regenerate code after modifying this file
 
 	Image string `json:"image"`
+
 	//+kubebuilder:validation:Optional
 	ImagePullSecret string `json:"imagePullSecret"`
-	Replicas        int32  `json:"replicas"`
-	Size            string `json:"size"`
+
+	Replicas int32 `json:"replicas"`
+
+	Size string `json:"size"`
+
 	//+kubebuilder:validation:Optional
 	StorageClass string `json:"storageClass"`
+
+	//+kubebuilder:validation:Optional
+	//+kubebuilder:default:="file:///mnt/mlruns/artifacts"
+	DefaultArtifactRoot string `json:"defaultArtifactRoot"`
+
+	//+kubebuilder:validation:Optional
+	ServiceAccountName string `json:"serviceAccountName"`
+
+	//+kubebuilder:validation:Optional
+	ExtraPodLabels map[string]string `json:"extraPodLabels"`
+
 	//+kubebuilder:validation:Optional
 	S3endpointURL string `json:"s3endpointURL,omitempty"`
+
 	//+kubebuilder:validation:Optional
 	S3secretName string `json:"s3secretName,omitempty"`
 

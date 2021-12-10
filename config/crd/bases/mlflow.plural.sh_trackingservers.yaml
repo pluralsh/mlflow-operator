@@ -36,6 +36,13 @@ spec:
           spec:
             description: TrackingServerSpec defines the desired state of TrackingServer
             properties:
+              defaultArtifactRoot:
+                default: file:///mnt/mlruns/artifacts
+                type: string
+              extraPodLabels:
+                additionalProperties:
+                  type: string
+                type: object
               image:
                 type: string
               imagePullSecret:
@@ -55,6 +62,8 @@ spec:
               s3endpointURL:
                 type: string
               s3secretName:
+                type: string
+              serviceAccountName:
                 type: string
               size:
                 type: string
