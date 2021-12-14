@@ -59,6 +59,11 @@ type TrackingServerReconciler struct {
 	Scheme *runtime.Scheme
 }
 
+//+kubebuilder:rbac:groups=acid.zalan.do,resources=postgresqls,verbs=get;list;watch;create;update;patch;delete
+//+kubebuilder:rbac:groups=networking.istio.io,resources=virtualservices,verbs=get;list;watch;create;update;patch;delete
+//+kubebuilder:rbac:groups=core,resources=persistentvolumeclaims,verbs=get;list;watch;create;update;patch;delete
+//+kubebuilder:rbac:groups=core,resources=services,verbs=get;list;watch;create;update;patch;delete
+//+kubebuilder:rbac:groups=apps,resources=statefulsets,verbs=get;list;watch;create;update;patch;delete
 //+kubebuilder:rbac:groups=mlflow.plural.sh,resources=trackingservers,verbs=get;list;watch;create;update;patch;delete
 //+kubebuilder:rbac:groups=mlflow.plural.sh,resources=trackingservers/status,verbs=get;update;patch
 //+kubebuilder:rbac:groups=mlflow.plural.sh,resources=trackingservers/finalizers,verbs=update
