@@ -212,6 +212,37 @@ func (r *TrackingServerReconciler) generatePVC(tsInstance *mlflowv1alpha1.Tracki
 
 func (r *TrackingServerReconciler) generatePostgres(tsInstance *mlflowv1alpha1.TrackingServer) *postgresv1.Postgresql {
 
+	resources := tsInstance.Spec.Postgres.Resources
+
+	var RequestsCPU string
+	var RequestsMem string
+	var LimitCPU string
+	var LimitMem string
+
+	if resources.Requests.CPU == "" {
+		RequestsCPU = "100m"
+	} else {
+		RequestsCPU = resources.Requests.CPU
+	}
+
+	if resources.Requests.Memory == "" {
+		RequestsMem = "100Mi"
+	} else {
+		RequestsMem = resources.Requests.Memory
+	}
+
+	if resources.Limits.CPU == "" {
+		LimitCPU = "1.5"
+	} else {
+		LimitCPU = resources.Limits.CPU
+	}
+
+	if resources.Limits.Memory == "" {
+		LimitMem = "1Gi"
+	} else {
+		LimitMem = resources.Limits.Memory
+	}
+
 	postgres := &postgresv1.Postgresql{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      fmt.Sprintf("plural-postgres-mlflow-%s", tsInstance.Name),
@@ -220,25 +251,26 @@ func (r *TrackingServerReconciler) generatePostgres(tsInstance *mlflowv1alpha1.T
 		Spec: postgresv1.PostgresSpec{
 			TeamID: "plural",
 			Volume: postgresv1.Volume{
-				Size: "10Gi",
+				Size:         tsInstance.Spec.Postgres.Volume.Size,
+				StorageClass: tsInstance.Spec.Postgres.Volume.StorageClass,
 			},
-			NumberOfInstances: 1,
+			NumberOfInstances: tsInstance.Spec.Postgres.Instances,
 			Users:             map[string]postgresv1.UserFlags{"mlflow": []string{"superuser", "createdb"}},
 			Databases:         map[string]string{"mlflow": "mlflow"},
 			PostgresqlParam: postgresv1.PostgresqlParam{
-				PgVersion: "13",
+				PgVersion: tsInstance.Spec.Postgres.Version,
 			},
 			PodAnnotations: map[string]string{
 				"sidecar.istio.io/inject": "false",
 			},
 			Resources: postgresv1.Resources{
 				ResourceRequests: postgresv1.ResourceDescription{
-					CPU:    "100m",
-					Memory: "100Mi",
+					CPU:    RequestsCPU,
+					Memory: RequestsMem,
 				},
 				ResourceLimits: postgresv1.ResourceDescription{
-					CPU:    "1.5",
-					Memory: "1Gi",
+					CPU:    LimitCPU,
+					Memory: LimitMem,
 				},
 			},
 			Sidecars: []postgresv1.Sidecar{

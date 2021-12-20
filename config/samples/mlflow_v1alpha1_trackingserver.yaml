@@ -10,3 +10,8 @@ spec:
   network:
     istioGatewayName: kubeflow-gateway
     istioGatewayNamespace: kubeflow
+  postgres:
+    instances: 1
+    version: "13"
+    volume:
+      size: 10Gi

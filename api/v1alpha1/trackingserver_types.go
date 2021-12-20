@@ -57,6 +57,8 @@ type TrackingServerSpec struct {
 	S3secretName string `json:"s3secretName,omitempty"`
 
 	Network TrackingServerSpecNetworkConfig `json:"network,omitempty"`
+
+	Postgres TrackingServerPostgresSpec `json:"postgres,omitempty"`
 }
 
 type TrackingServerSpecNetworkConfig struct {
@@ -65,6 +67,52 @@ type TrackingServerSpecNetworkConfig struct {
 
 	// Name of the Istio Gateway to use for the VirtualService
 	IstioGatewayNamespace string `json:"istioGatewayNamespace,omitempty"`
+}
+
+type TrackingServerPostgresSpec struct {
+	// The number of instances for the Postgres cluster
+	//+kubebuilder:validation:Minimum=1
+	//+kubebuilder:default:=1
+	Instances int32 `json:"instances,omitempty"`
+
+	// The number of instances for the Postgres cluster
+	Volume PostgresVolumeSpec `json:"volume,omitempty"`
+
+	// The resource configuration of the Postgres cluster
+	Resources PostgresResources `json:"resources,omitempty"`
+
+	// The Postgres version to use
+	//+kubebuilder:validation:Enum="9.3";"9.4";"9.5";"9.6";"10";"11";"12";"13"
+	//+kubebuilder:default:="13"
+	Version string `json:"version,omitempty"`
+}
+
+type PostgresVolumeSpec struct {
+	// The size of the volume where Postgres will save it's data
+	//+kubebuilder:default:="10Gi"
+	Size string `json:"size"`
+
+	// The storage class for the volume used by Postgres
+	//+kubebuilder:validation:Optional
+	StorageClass string `json:"storageClass,omitempty"`
+}
+
+type PostgresResources struct {
+	// The resource requests for the Postgres instances
+	//+kubebuilder:validation:Optional
+	Requests PostgresResourceSpec `json:"requests"`
+
+	// The resource requests for the Postgres instances
+	//+kubebuilder:validation:Optional
+	Limits PostgresResourceSpec `json:"limits"`
+}
+
+type PostgresResourceSpec struct {
+	// The resource requests for the Postgres instances
+	CPU string `json:"requests"`
+
+	// The resource requests for the Postgres instances
+	Memory string `json:"limits"`
 }
 
 // TrackingServerStatus defines the observed state of TrackingServer
