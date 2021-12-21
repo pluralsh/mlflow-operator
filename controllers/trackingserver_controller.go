@@ -149,15 +149,17 @@ func (r *TrackingServerReconciler) Reconcile(ctx context.Context, req ctrl.Reque
 		return ctrl.Result{}, err
 	}
 
-	// Reconcile VirtualService for the Tracking Server
-	virtualService := r.generateVirtualService(tsInstance)
-	if err := ctrl.SetControllerReference(tsInstance, virtualService, r.Scheme); err != nil {
-		log.Error(err, "Error setting ControllerReference for VirtualService")
-		return ctrl.Result{}, err
-	}
-	if err := reconcilehelper.VirtualService(ctx, r.Client, virtualService, log); err != nil {
-		log.Error(err, "Error reconciling VirtualService", "virtualservice", virtualService.Name, "namespace", virtualService.Namespace)
-		return ctrl.Result{}, err
+	if tsInstance.Spec.Network.IstioEnabled {
+		// Reconcile VirtualService for the Tracking Server
+		virtualService := r.generateVirtualService(tsInstance)
+		if err := ctrl.SetControllerReference(tsInstance, virtualService, r.Scheme); err != nil {
+			log.Error(err, "Error setting ControllerReference for VirtualService")
+			return ctrl.Result{}, err
+		}
+		if err := reconcilehelper.VirtualService(ctx, r.Client, virtualService, log); err != nil {
+			log.Error(err, "Error reconciling VirtualService", "virtualservice", virtualService.Name, "namespace", virtualService.Namespace)
+			return ctrl.Result{}, err
+		}
 	}
 
 	return ctrl.Result{}, nil

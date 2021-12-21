@@ -56,16 +56,25 @@ type TrackingServerSpec struct {
 	//+kubebuilder:validation:Optional
 	S3secretName string `json:"s3secretName,omitempty"`
 
+	// Networking config for the tracking server instance
 	Network TrackingServerSpecNetworkConfig `json:"network,omitempty"`
 
+	// Postgres config for the tracking server instance
 	Postgres TrackingServerPostgresSpec `json:"postgres,omitempty"`
 }
 
 type TrackingServerSpecNetworkConfig struct {
+	// Enable creating Istio Virtual Service as part of the controller
+	//+kubebuilder:validation:Optional
+	//+kubebuilder:default:=true
+	IstioEnabled bool `json:"istioEnabled,omitempty"`
+
 	// Name of the Istio Gateway to use for the VirtualService
+	//+kubebuilder:validation:Optional
 	IstioGatewayName string `json:"istioGatewayName,omitempty"`
 
 	// Name of the Istio Gateway to use for the VirtualService
+	//+kubebuilder:validation:Optional
 	IstioGatewayNamespace string `json:"istioGatewayNamespace,omitempty"`
 }
 
