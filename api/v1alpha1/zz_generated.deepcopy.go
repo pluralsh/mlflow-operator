@@ -158,6 +158,13 @@ func (in *TrackingServerSpec) DeepCopyInto(out *TrackingServerSpec) {
 			(*out)[key] = val
 		}
 	}
+	if in.ExtraPodAnnotations != nil {
+		in, out := &in.ExtraPodAnnotations, &out.ExtraPodAnnotations
+		*out = make(map[string]string, len(*in))
+		for key, val := range *in {
+			(*out)[key] = val
+		}
+	}
 	out.Network = in.Network
 	out.Postgres = in.Postgres
 }

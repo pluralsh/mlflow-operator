@@ -490,7 +490,8 @@ func (r *TrackingServerReconciler) generateStatefulset(tsInstance *mlflowv1alpha
 			},
 			Template: corev1.PodTemplateSpec{
 				ObjectMeta: metav1.ObjectMeta{
-					Labels: labels,
+					Labels:      labels,
+					Annotations: tsInstance.Spec.ExtraPodAnnotations,
 				},
 				Spec: corev1.PodSpec{
 					Containers: container,

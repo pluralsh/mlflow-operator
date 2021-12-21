@@ -51,6 +51,9 @@ type TrackingServerSpec struct {
 	ExtraPodLabels map[string]string `json:"extraPodLabels"`
 
 	//+kubebuilder:validation:Optional
+	ExtraPodAnnotations map[string]string `json:"extraPodAnnotations"`
+
+	//+kubebuilder:validation:Optional
 	S3endpointURL string `json:"s3endpointURL,omitempty"`
 
 	//+kubebuilder:validation:Optional
