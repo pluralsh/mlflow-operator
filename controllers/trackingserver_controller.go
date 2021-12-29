@@ -173,7 +173,7 @@ func (r *TrackingServerReconciler) SetupWithManager(mgr ctrl.Manager) error {
 		Owns(&corev1.Service{}).
 		Owns(&postgresv1.Postgresql{}).
 		Owns(&appsv1.StatefulSet{}).
-		Owns(&istioNetworkingClient.VirtualService{}).
+		// Owns(&istioNetworkingClient.VirtualService{}).
 		Complete(r)
 }
 
